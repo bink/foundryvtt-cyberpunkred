@@ -100,7 +100,8 @@ export const listsSkills = { // Here begins the object
     "sort": "localexpert",
     "category": "cateducation",
     "jsk": true,
-    "core": true
+    "core": true,
+    "allowmultiple": true
   },
   "marksmanship": {
     "linkedattribute": "ref",
