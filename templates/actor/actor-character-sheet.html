@@ -388,11 +388,34 @@
         {{#each ../data.skills as |skill key|}}
         {{#if skill.show}}
         {{#if_eq skill.category thiscategory}}
-        <label for="data.skills.{{key}}.value" data-label="{{localize (concat 'CPRED.' key)}}" data-roll="{{rollSkill key}}" class="rollable">{{localize (concat "CPRED." key)}} ({{localize (concat "CPRED." skill.linkedattribute)}})</label>
-        <input class="skill-value" type="number" name="data.skills.{{key}}.value" value="{{skill.value}}" data-dtype="Number"/>
-        <input type="number" name="data.skills.{{key}}.mod" value="{{skill.mod}}" data-dtype="Number"/>
-        <input type="number" name="data.skills.{{key}}.itemmod" value="{{skill.itemmod}}" data-dtype="Number" readonly/>
-        <input type="number" name="data.skills.{{key}}.totalpool" value="{{skill.totalpool}}" data-dtype="Number" readonly/>
+
+        {{#if skill.allowmultiple}}
+          <label for="data.skills.{{key}}.value" data-label="{{localize (concat 'CPRED.' key)}}">{{localize (concat "CPRED." key)}} ({{localize (concat "CPRED." skill.linkedattribute)}})
+              <a class="skill-multiple-create" data-skill="{{key}}"><i class="fas fa-plus"></i></a>
+          </label>
+          <label></label><label></label><label></label><label></label>
+          {{#each skill.entries as |entry entryKey|}}
+          <div>
+            <label class="rollable" data-roll="{{rollSkill (concat key '.entry.' entryKey)}}" data-label="{{localize (concat 'CPRED.' key)}} ({{entry.name}})">
+            </label>
+            <input class="skill-multiple-name" style="width: 80%;" type="text" name="data.skills.{{key}}.entries.{{entryKey}}.name" value="{{entry.name}}"/>
+            <a class="skill-entry-delete" data-skill="{{key}}" data-delete="{{entryKey}}"><i class="fas fa-trash"></i></a>
+          </div>
+          <input class="skill-value" type="number" name="data.skills.{{key}}.entries.{{entryKey}}.value" value="{{entry.value}}" data-dtype="Number"/>
+          <input type="number" name="data.skills.{{key}}.entries.{{entryKey}}.mod" value="{{entry.mod}}" data-dtype="Number"/>
+          <input type="number" name="data.skills.{{key}}.entries.{{entryKey}}.itemmod" value="{{entry.itemmod}}" data-dtype="Number" readonly/>
+          <input type="number" name="data.skills.{{key}}.entries.{{entryKey}}.totalpool" value="{{entry.totalpool}}" data-dtype="Number" readonly/>
+          {{/each}}
+
+
+        {{else}}
+          <label for="data.skills.{{key}}.value" data-label="{{localize (concat 'CPRED.' key)}}" data-roll="{{rollSkill key}}" class="rollable">{{localize (concat "CPRED." key)}} ({{localize (concat "CPRED." skill.linkedattribute)}})
+          </label>
+          <input class="skill-value" type="number" name="data.skills.{{key}}.value" value="{{skill.value}}" data-dtype="Number"/>
+          <input type="number" name="data.skills.{{key}}.mod" value="{{skill.mod}}" data-dtype="Number"/>
+          <input type="number" name="data.skills.{{key}}.itemmod" value="{{skill.itemmod}}" data-dtype="Number" readonly/>
+          <input type="number" name="data.skills.{{key}}.totalpool" value="{{skill.totalpool}}" data-dtype="Number" readonly/>
+        {{/if}}
         {{/if_eq}}
         {{/if}}
         {{/each}} </div>

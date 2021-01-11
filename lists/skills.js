@@ -135,7 +135,8 @@ export const listsSkills = { // Here begins the object
     "sort": "playinstrument",
     "category": "catperformance",
     "jsk": true,
-    "core": true
+    "core": true,
+    "allowmultiple": true
   },
   "stealth": {
     "linkedattribute": "dex",
@@ -324,7 +325,8 @@ export const listsSkills = { // Here begins the object
     "sort": "language",
     "category": "cateducation",
     "jsk": false,
-    "core": true
+    "core": true,
+    "allowmultiple": true
   },
   "librarysearch": {
     "linkedattribute": "int",
@@ -422,7 +424,8 @@ export const listsSkills = { // Here begins the object
     "sort": "science",
     "category": "cateducation",
     "jsk": false,
-    "core": true
+    "core": true,
+    "allowmultiple": true,
   },
   "seavehicletech": {
     "linkedattribute": "tech",

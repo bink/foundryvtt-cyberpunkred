@@ -374,6 +374,23 @@ export class cyberpunkredActor extends Actor {
         attr.roll = data.culturalFamiliarity + attr.mod + attr.itemmod;
         attr.totalpool = data.culturalFamiliarity + data.attributes[attr.linkedattribute].roll;
       }
+      // Handle subentries of multi skills
+      let entries = attr.entries || {};
+      if (attr.allowmultiple && Object.entries(entries).length > 0) {
+        for (let [entryKey, entry] of Object.entries(entries)) {
+          if (entry == null) {
+            delete entries[entryKey];
+            continue;
+          }
+          entry.itemmod = 0;
+          entry.roll = ((entry.value * 1) + (entry.mod * 1) + (entry.itemmod * 1)) * 1;
+          entry.totalpool = entry.roll + data.attributes[attr.linkedattribute].roll;
+        }
+        attr.entries = entries;
+      } else {
+        delete attr.entries;
+      }
+      
     }
 
 
@@ -548,10 +565,24 @@ export class cyberpunkredActor extends Actor {
         break;
       default:
         var root = data.skills;
+        var parts = skill.split(".");
+        var subskill;
+        if (parts.length > 1) {
+          // Multiskill
+          skill = parts[0];
+          subskill = parts[2];
+        }
         //Skill Roll Value
-        rollArray.push(root[skill].roll);
-        tags.push(game.i18n.localize("CPRED." + skill) + ": " + root[skill].value + " + " + root[skill].mod + " + " + root[skill].itemmod + " = " + root[skill].roll);
+        if (subskill) {
+          rollArray.push(root[skill].entries[subskill].roll);
+          tags.push(game.i18n.localize("CPRED." + skill) + " (" + root[skill].entries[subskill].name +")" + ": " + root[skill].value + " + " + root[skill].mod + " + " + root[skill].itemmod + " = " + root[skill].roll);
+        } else {
+          rollArray.push(root[skill].roll);
+          tags.push(game.i18n.localize("CPRED." + skill) + ": " + root[skill].value + " + " + root[skill].mod + " + " + root[skill].itemmod + " = " + root[skill].roll);
+        }
 
+        console.log(rollArray);
+        console.log(tags);
         //Attribute Roll Value
         rollArray.push(data.attributes[root[skill].linkedattribute].roll);
         tags.push(game.i18n.localize("CPRED." + root[skill].linkedattribute) + ": " + data.attributes[root[skill].linkedattribute].value + " + " + data.attributes[root[skill].linkedattribute].mod + " + " + data.attributes[root[skill].linkedattribute].itemmod + " = " + data.attributes[root[skill].linkedattribute].roll);

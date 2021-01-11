@@ -285,6 +285,31 @@ export class cyberpunkredActorSheet extends ActorSheet {
     // Rollable abilities.
     html.find('.rollable').click(this._onRoll.bind(this));
     html.find('.npcrollable').click(this._onRoll.bind(this));
+
+    html.find('.skill-multiple-create').click(ev => {
+      const actor = this.actor;
+      const skillKey = $(ev.currentTarget).attr("data-skill");
+      // Get skill array
+      var skillEntries = Object.values(actor.data.data.skills[skillKey].entries || {}) ;
+      skillEntries.push({"name":"","value":0,"mod":0});
+
+      actor.update({
+        ["data.skills."+skillKey+".entries"]: skillEntries
+      });
+    });
+
+    html.find('.skill-entry-delete').click(ev => {
+      const actor = this.actor;
+      const skill = $(ev.currentTarget).attr("data-skill");
+      const entry = $(ev.currentTarget).attr("data-delete");
+      var skillEntries = actor.data.data.skills[skill].entries;
+      skillEntries[entry] = null;
+      actor.update({
+        ["data.skills."+skill+".entries"]: skillEntries
+      });
+
+      this.render(false);
+    });
   }
 
   /**
